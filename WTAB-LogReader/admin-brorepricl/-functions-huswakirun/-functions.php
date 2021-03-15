@@ -10,8 +10,13 @@ function get_error_log_files_from_website($dir, &$results = array()) {
             get_error_log_files_from_website($path, $results);
         }
 
-        if($v === $_field_ErrorFileName_slug){
-            $results[] = $path;
+        $_field_ErrorFileName_slugs = explode(',', $_field_ErrorFileName_slug);
+        foreach ($_field_ErrorFileName_slugs as $__field_ErrorFileName_slug){
+            $__field_ErrorFileName_slug = trim($__field_ErrorFileName_slug);
+            $pos = strpos($v, $__field_ErrorFileName_slug);
+            if ($pos === 0) {
+                $results[] = $path;
+            }
         }
     }
 
