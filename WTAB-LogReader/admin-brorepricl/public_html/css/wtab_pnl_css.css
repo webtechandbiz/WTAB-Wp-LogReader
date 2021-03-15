@@ -1,5 +1,6 @@
 .admin_drefregech_pnl_form_settings_page_table table{
-    width: 100%;
+    width: 95%;
+    margin: 0 auto;
 }
 .admin_drefregech_pnl_form_settings_page_table input{
     width: 100%;
