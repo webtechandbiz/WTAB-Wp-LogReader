@@ -31,6 +31,9 @@ function register_pnl_form_drefregech_settings() {
             }
         }
     }
+    
+    register_setting( 'drefregech_pnl_form_settings_page', 'choosenfile' );
+    register_setting( 'drefregech_pnl_form_settings_page', 'wpdebugactive' );
 }
 
 //# Panel form page
@@ -115,6 +118,82 @@ function drefregech_pnl_form_settings_page() {?>
             }
             ?>
         </table>
-        <?php submit_button(); ?>
-    </form><?php
+
+        <?php
+        echo '<h2>(most likely) Error filenames in the website:</h2>';
+        echo '<input type="hidden" id="choosenfile" name="choosenfile" value="'.get_option('choosenfile').'"/></td>';
+        echo '<table>';
+
+        $error_log_file_found = false;
+        $_get_error_log_files_from_website = get_error_log_files_from_website(ABSPATH);
+        $_field_ErrorFileName_slugs = explode('|', get_option('choosenfile'));
+        foreach ($_get_error_log_files_from_website as $file){
+            $_options = '';
+            $_option_selected = false;
+            foreach ($_field_ErrorFileName_slugs as $__field_ErrorFileName_slug){
+                if($__field_ErrorFileName_slug === $file){
+                    $_option_selected = true;
+                }
+            }
+            if($_option_selected){
+                echo '
+                    <tr>
+                        <td>'.$file.'</td><td><input data-filename="'.$file.'" class="wtab_chk_choosenfile" checked="checked" type="checkbox" name="chk_choosenfile" value="1"/></td>
+                    </tr>';
+            }else{
+                echo '
+                    <tr>
+                        <td>'.$file.'</td><td><input data-filename="'.$file.'" class="wtab_chk_choosenfile" type="checkbox" name="chk_choosenfile" value="0"/></td>
+                    </tr>';
+            }
+
+            $error_log_file_found = true;
+        }
+        if(!$error_log_file_found){
+            echo 'I can\'t find any error log file. Try to click on "WTAB Log Reader form" e type the error log filename.';
+        }
+        echo '</table>';
+
+        //# WP Debug
+        if(intval(get_option('wpdebugactive')) > 0){
+            $_wpdebugactive_selected = true;
+        }else{
+            $_wpdebugactive_selected = false;
+        }
+        echo '<h2>Debug mode</h2>';
+        echo '<input type="hidden" id="wpdebugactive" name="wpdebugactive" value="'.get_option('wpdebugactive').'"/></td>';
+        echo '<table>';
+            if($_wpdebugactive_selected){
+                echo '
+                    <tr>
+                        <td>WP_DEBUG state (is active?)</td><td><input class="wtab_chk_wpdebugactive" checked="checked" type="checkbox" name="chk_wpdebugactive" value="1"/></td>
+                    </tr>';
+
+                if (!defined('WP_DEBUG')){
+                    define( 'WP_DEBUG', true );
+                }
+
+                if (!defined('WP_DEBUG_LOG')){
+                    define( 'WP_DEBUG_LOG', true );
+                }
+
+                if (!defined('WP_DEBUG_DISPLAY')){
+                    define( 'WP_DEBUG_DISPLAY', false );
+                    @ini_set( 'display_errors', 0 );
+                }
+
+                if (!defined('SCRIPT_DEBUG')){
+                    define( 'SCRIPT_DEBUG', true );
+                }
+            }else{
+                echo '
+                    <tr>
+                        <td>WP_DEBUG</td><td><input class="wtab_chk_wpdebugactive" type="checkbox" name="chk_wpdebugactive" value="0"/></td>
+                    </tr>';
+            }
+        echo '</table>';
+
+        submit_button(); ?>
+    </form>
+    <?php
 }
