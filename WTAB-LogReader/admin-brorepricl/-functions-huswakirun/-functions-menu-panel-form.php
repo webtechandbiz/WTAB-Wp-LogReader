@@ -177,11 +177,6 @@ function drefregech_pnl_form_settings_page() {?>
                     define( 'WP_DEBUG_LOG', true );
                 }
 
-                if (!defined('WP_DEBUG_DISPLAY')){
-                    define( 'WP_DEBUG_DISPLAY', false );
-                    @ini_set( 'display_errors', 0 );
-                }
-
                 if (!defined('SCRIPT_DEBUG')){
                     define( 'SCRIPT_DEBUG', true );
                 }
@@ -190,6 +185,39 @@ function drefregech_pnl_form_settings_page() {?>
                     <tr>
                         <td>WP_DEBUG</td><td><input class="wtab_chk_wpdebugactive" type="checkbox" name="chk_wpdebugactive" value="0"/></td>
                     </tr>';
+            }
+        echo '</table>';
+
+        //# Show PHP messages
+        if(intval(get_option('wpshowphpmsgactive')) > 0){
+            $_wpshowphpmsgactive_selected = true;
+        }else{
+            $_wpshowphpmsgactive_selected = false;
+        }
+        echo '<h2>View PHP message mode</h2>';
+        echo '<input type="hidden" id="wpshowphpmsgactive" name="wpshowphpmsgactive" value="'.get_option('wpshowphpmsgactive').'"/></td>';
+        echo '<table>';
+            if($_wpshowphpmsgactive_selected){
+                echo '
+                    <tr>
+                        <td>Show PHP messages ?</td><td><input class="wtab_chk_wpshowphpmsgactive" checked="checked" type="checkbox" name="chk_wpshowphpmsgactive" value="1"/></td>
+                    </tr>';
+
+                if (!defined('WP_DEBUG_DISPLAY')){
+                    define( 'WP_DEBUG_DISPLAY', true );
+                    @ini_set( 'display_errors', 1 );
+                }
+
+            }else{
+                echo '
+                    <tr>
+                        <td>WP_DEBUG_DISPLAY</td><td><input class="wtab_chk_wpshowphpmsgactive" type="checkbox" name="chk_wpshowphpmsgactive" value="0"/></td>
+                    </tr>';
+
+                if (!defined('WP_DEBUG_DISPLAY')){
+                    define( 'WP_DEBUG_DISPLAY', false );
+                    @ini_set( 'display_errors', 0 );
+                }
             }
         echo '</table>';
 
