@@ -31,4 +31,12 @@ jQuery( document ).ready(function() {
             jQuery('#wpdebugactive').val(0);
         }
     });
+
+    jQuery('body').on('change', ".wtab_chk_wpshowphpmsgactive", function(e) {
+        if(jQuery(this).prop('checked')){
+            jQuery('#wpshowphpmsgactive').val(1);
+        }else{
+            jQuery('#wpshowphpmsgactive').val(0);
+        }
+    });
 });
